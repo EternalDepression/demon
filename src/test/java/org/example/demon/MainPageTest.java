@@ -11,6 +11,7 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 
 import java.time.Duration;
+import java.util.List;
 
 public class MainPageTest {
     private WebDriver driver;
@@ -37,9 +38,15 @@ public class MainPageTest {
         WebElement searchField = driver.findElement(By.cssSelector("#sb_form_q"));
         searchField.sendKeys(input);
         searchField.submit();
+        List<WebElement> results = driver.findElements(By.xpath("//h2[@class=' b_topTitle']"));
+        clickElement(results, 0);
+        driver.getCurrentUrl();
+        assertEquals(results, "Неверный результат");
 
-        WebElement searchPageField = driver.findElement(By.cssSelector("#sb_form_q"));
-        assertEquals(input, searchPageField.getAttribute("value"));
     }
 
-}
+    public void clickElement(List<WebElement> results, int num){
+            results.get(num).click();
+            System.out.println("Произведен клик по номеру 0 в поиске");
+        }
+    }
