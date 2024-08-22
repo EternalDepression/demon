@@ -19,17 +19,19 @@ import java.util.List;
 
 public class BingSearchTest {
 
+    String input = "Selenium";
     private WebDriver driver;
+    MainPage mp;
+    ResultsPage rp;
 
     @BeforeEach
     public void setUp() {
-        ChromeOptions options = new ChromeOptions();
-        // Fix the issue https://github.com/SeleniumHQ/selenium/issues/11750
-        options.addArguments("--remote-allow-origins=*");
-        driver = new ChromeDriver(options);
+        driver = new ChromeDriver();
         driver.manage().window().maximize();
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
         driver.get("https://www.bing.com/");
+        mp = new MainPage(driver);
+        rp = new ResultsPage(driver);
     }
 
     @AfterEach
@@ -39,27 +41,14 @@ public class BingSearchTest {
 
     @Test
     public void searchResultsTest() {
-        String input = "Selenium";
-        MainPage mp = new MainPage(driver);
         mp.sendText(input);
-
-        ResultsPage rp = new ResultsPage(driver);
         rp.clickElement(0);
-
         assertEquals("https://www.selenium.dev/", driver.getCurrentUrl(), "Неверный результат");
     }
 
     @Test
     public void searchFieldTest() {
-        String input = "Selenium";
-        MainPage mp = new MainPage(driver);
         mp.sendText(input);
-
-        ResultsPage rp = new ResultsPage(driver);
-
         assertEquals(input, rp.getTextFromSearchField(), "Текст не совпал");
     }
-
-
-
 }
